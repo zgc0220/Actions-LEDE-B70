@@ -15,6 +15,7 @@ if [ ! -e openwrt ]; then
   git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 else
   pushd openwrt
+  rm -rf feeds files package
   git pull origin $REPO_BRANCH
   git reset --hard origin/$REPO_BRANCH
   popd
