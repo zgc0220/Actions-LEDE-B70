@@ -1,0 +1,51 @@
+#!/bin/bash
+
+GITHUB_WORKSPACE=$(cd $(dirname $0);pwd)
+DEVICE_NAME=$(grep '^CONFIG_TARGET.*DEVICE.*=y' config.seed | sed -r 's/CONFIG_TARGET_(.*)_DEVICE.*=y/\1/')
+REPO_URL="https://github.com/coolsnowwolf/lede"
+REPO_BRANCH="master"
+FEEDS_CONF="feeds.conf.default"
+CONFIG_FILE="config.seed"
+DIY_P1_SH="diy-part1.sh"
+DIY_P2_SH="diy-part2.sh"
+
+
+if [ ! -e openwrt ]; then
+  git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+else
+  pushd openwrt
+  git pull origin $REPO_BRANCH
+  git reset --hard origin/$REPO_BRANCH
+  popd
+fi
+
+[ -e $FEEDS_CONF ] && cp $FEEDS_CONF openwrt/feeds.conf.default
+chmod +x $DIY_P1_SH
+
+pushd openwrt
+GITHUB_WORKSPACE=$GITHUB_WORKSPACE $GITHUB_WORKSPACE/$DIY_P1_SH
+./scripts/feeds update -a
+./scripts/feeds install -a
+popd
+
+[ -e files ] && cp files openwrt/files
+[ -e $CONFIG_FILE ] && cp $CONFIG_FILE openwrt/.config
+chmod +x $DIY_P2_SH
+
+pushd openwrt
+GITHUB_WORKSPACE=$GITHUB_WORKSPACE $GITHUB_WORKSPACE/$DIY_P2_SH
+make defconfig
+make download -j8
+make -j$(nproc) || make -j1 || make -j1 V=s
+popd
+
+mkdir -p release
+pushd openwrt/bin/targets/*/*
+cp config.buildinfo $GITHUB_WORKSPACE/release
+cp $(ls -1 ./*img.gz | head -1) $GITHUB_WORKSPACE/release/$DEVICE_NAME.img.gz
+popd
+
+pushd release
+md5sum $DEVICE_NAME.img.gz > $DEVICE_NAME.img.gz.md5
+gzip -dc $DEVICE_NAME.img.gz | md5sum | sed "s/-/$DEVICE_NAME.img/" > $DEVICE_NAME.img.md5
+popd
