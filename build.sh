@@ -30,7 +30,7 @@ GITHUB_WORKSPACE=$GITHUB_WORKSPACE $GITHUB_WORKSPACE/$DIY_P1_SH
 ./scripts/feeds install -a
 popd
 
-[ -e files ] && cp files openwrt/files
+[ -e files ] && cp -r files openwrt/files
 [ -e $CONFIG_FILE ] && cp $CONFIG_FILE openwrt/.config
 chmod +x $DIY_P2_SH
 
