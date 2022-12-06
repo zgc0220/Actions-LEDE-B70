@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cd /tmp
+IMG_DIR=${IMG_DIR:-/tmp}
+cd $IMG_DIR
 
 DISK=${DISK:-sda}
 GITHUB_REPO="zgc/Actions-LEDE"
