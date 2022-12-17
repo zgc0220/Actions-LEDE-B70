@@ -15,7 +15,7 @@ if [ ! -e openwrt ]; then
   git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 else
   pushd openwrt
-  rm -rf feeds files package
+  rm -rf files package
   git pull origin $REPO_BRANCH
   git reset --hard origin/$REPO_BRANCH
   popd
@@ -26,7 +26,7 @@ chmod +x $DIY_P1_SH
 
 pushd openwrt
 GITHUB_WORKSPACE=$GITHUB_WORKSPACE $GITHUB_WORKSPACE/$DIY_P1_SH
-./scripts/feeds update -a
+./scripts/feeds update -f -a
 ./scripts/feeds install -a
 popd
 
