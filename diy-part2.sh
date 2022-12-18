@@ -31,12 +31,14 @@ cp $GITHUB_WORKSPACE/scripts/check_wan_connect.sh package/base-files/files/etc
 cp $GITHUB_WORKSPACE/scripts/reset_get_img.sh package/base-files/files/etc
 cp $GITHUB_WORKSPACE/scripts/reset_latest.sh package/base-files/files/etc
 cp $GITHUB_WORKSPACE/scripts/reset_offline.sh package/base-files/files/etc
+cp $GITHUB_WORKSPACE/scripts/reset_upload.sh package/base-files/files/etc
 chmod +x package/base-files/files/etc/check_smartdns_connect.sh
 chmod +x package/base-files/files/etc/check_openclash_connect.sh
 chmod +x package/base-files/files/etc/check_wan_connect.sh
 chmod +x package/base-files/files/etc/reset_get_img.sh
 chmod +x package/base-files/files/etc/reset_latest.sh
 chmod +x package/base-files/files/etc/reset_offline.sh
+chmod +x package/base-files/files/etc/reset_upload.sh
 sed -i '/exit 0/i\if [[ "$(cat /etc/crontabs/root | grep "/etc/check_smartdns_connect.sh")" = "" ]]; then echo "#*/5 * * * * /etc/check_smartdns_connect.sh" >> /etc/crontabs/root; fi' package/lean/default-settings/files/zzz-default-settings
 sed -i '/exit 0/i\if [[ "$(cat /etc/crontabs/root | grep "/etc/check_openclash_connect.sh")" = "" ]]; then echo "#*/5 * * * * /etc/check_openclash_connect.sh" >> /etc/crontabs/root; fi' package/lean/default-settings/files/zzz-default-settings
 sed -i '/exit 0/i\if [[ "$(cat /etc/crontabs/root | grep "/etc/check_wan_connect.sh")" = "" ]]; then echo "#*/5 * * * * /etc/check_wan_connect.sh" >> /etc/crontabs/root; fi' package/lean/default-settings/files/zzz-default-settings
