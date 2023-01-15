@@ -3,6 +3,7 @@
 GITHUB_WORKSPACE=$(cd $(dirname $0);pwd)
 RELEASE_DIR=${RELEASE_DIR:-$GITHUB_WORKSPACE/release}
 DEVICE_NAME=$(grep '^CONFIG_TARGET.*DEVICE.*=y' config.seed | sed -r 's/CONFIG_TARGET_(.*)_DEVICE.*=y/\1/')
+RELEASE_NAME=${RELEASE_NAME:-$DEVICE_NAME}
 REPO_URL="https://github.com/coolsnowwolf/lede"
 REPO_BRANCH="master"
 FEEDS_CONF="feeds.conf.default"
@@ -44,10 +45,10 @@ popd
 mkdir -p $RELEASE_DIR
 pushd openwrt/bin/targets/*/*
 cp config.buildinfo $RELEASE_DIR
-cp $(ls -1 ./*img.gz | head -1) $RELEASE_DIR/$DEVICE_NAME.img.gz
+cp $(ls -1 ./*img.gz | head -1) $RELEASE_DIR/$RELEASE_NAME.img.gz
 popd
 
 pushd $RELEASE_DIR
-md5sum $DEVICE_NAME.img.gz > $DEVICE_NAME.img.gz.md5
-gzip -dc $DEVICE_NAME.img.gz | md5sum | sed "s/-/$DEVICE_NAME.img/" > $DEVICE_NAME.img.md5
+md5sum $RELEASE_NAME.img.gz > $RELEASE_NAME.img.gz.md5
+gzip -dc $RELEASE_NAME.img.gz | md5sum | sed "s/-/$RELEASE_NAME.img/" > $RELEASE_NAME.img.md5
 popd

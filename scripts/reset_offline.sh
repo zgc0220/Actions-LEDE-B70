@@ -5,11 +5,12 @@ cd $IMG_DIR
 
 DISK=${DISK:-sda}
 ARCH=`uname -m`
+RELEASE_NAME=${RELEASE_NAME:-$ARCH}
 
-IMG_GZ=$ARCH.img.gz
-IMG_GZ_MD5=$ARCH.img.gz.md5
-IMG_MD5=$ARCH.img.md5
-IMG=$ARCH.img
+IMG_GZ=$RELEASE_NAME.img.gz
+IMG_GZ_MD5=$RELEASE_NAME.img.gz.md5
+IMG_MD5=$RELEASE_NAME.img.md5
+IMG=$RELEASE_NAME.img
 
 echo -e '\e[92m准备更新 '$ARCH' img 到 '$DISK'\e[0m'
 
