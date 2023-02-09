@@ -149,6 +149,9 @@ config openclash 'config'
 	option urltest_address_mod '0'
 	option find_process_mode 'off'
 	option dnsmasq_resolvfile '/tmp/resolv.conf.auto'
+	option dnsmasq_noresolv '0'
+	option enable_meta_sniffer_pure_ip '0'
+	option cndomain_custom_url 'https://testingcf.jsdelivr.net/gh/felixonmars/dnsmasq-china-list@master/accelerated-domains.china.conf'
 
 config dns_servers
 	option type 'udp'
