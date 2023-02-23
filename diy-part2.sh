@@ -499,7 +499,7 @@ config dns_servers
 	option specific_group 'Disable'
 ' >package/lean/luci-app-openclash/root/etc/config/openclash
 mkdir -p package/lean/luci-app-openclash/root/etc/openclash/core
-tar zxf $GITHUB_WORKSPACE/OpenClash/core-lateset/meta/clash-linux-${CPU_MODEL}.tar.gz
+curl --retry 5 -L https://github.com/vernesong/OpenClash/raw/core/dev/meta/clash-linux-${CPU_MODEL}.tar.gz | tar zxf -
 mv clash package/lean/luci-app-openclash/root/etc/openclash/core/clash_meta
 chmod +x package/lean/luci-app-openclash/root/etc/openclash/core/clash_meta
 curl --retry 5 -L https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat -o package/lean/luci-app-openclash/root/etc/openclash/GeoIP.dat
