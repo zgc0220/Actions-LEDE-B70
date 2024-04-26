@@ -30,7 +30,7 @@ git remote add -f origin https://github.com/immortalwrt/luci.git
 git config core.sparsecheckout true
 echo "applications/luci-app-filebrowser" >> .git/info/sparse-checkout
 echo "applications/luci-app-smartdns" >> .git/info/sparse-checkout
-git pull --depth 1 origin $IMMORTALWRT_BRANCH
+git checkout $IMMORTALWRT_BRANCH
 popd
 rm -rf package/lean/luci-app-filebrowser
 mv immortalwrt/luci/applications/luci-app-filebrowser package/lean/luci-app-filebrowser
@@ -45,7 +45,7 @@ git init
 git remote add -f origin https://github.com/immortalwrt/packages.git
 git config core.sparsecheckout true
 echo "utils/filebrowser" >> .git/info/sparse-checkout
-git pull --depth 1 origin $IMMORTALWRT_BRANCH
+git checkout $IMMORTALWRT_BRANCH
 popd
 rm -rf package/lean/filebrowser
 mv immortalwrt/packages/utils/filebrowser package/lean/filebrowser
@@ -59,7 +59,7 @@ git init
 git remote add -f origin https://github.com/vernesong/OpenClash.git
 git config core.sparsecheckout true
 echo "luci-app-openclash" >> .git/info/sparse-checkout
-git pull --depth 1 origin $OPENCLASH_BRANCH
+git checkout $OPENCLASH_BRANCH
 popd
 rm -rf package/lean/luci-app-openclash
 mv vernesong/OpenClash/luci-app-openclash package/lean/luci-app-openclash
