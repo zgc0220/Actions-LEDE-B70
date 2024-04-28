@@ -24,13 +24,12 @@ rm -rf package/lean/luci-app-argon-config
 git clone --depth 1 -b 18.06 https://github.com/jerrykuku/luci-app-argon-config.git package/lean/luci-app-argon-config
 
 mkdir -p immortalwrt/luci
+git clone --depth 1 -b $IMMORTALWRT_BRANCH --filter=blob:none --sparse https://github.com/immortalwrt/luci.git --no-checkout immortalwrt/luci
 pushd immortalwrt/luci
-git init
-git remote add -f origin https://github.com/immortalwrt/luci.git
-git config core.sparsecheckout true
+git sparse-checkout init --cone
 echo "applications/luci-app-filebrowser" >> .git/info/sparse-checkout
 echo "applications/luci-app-smartdns" >> .git/info/sparse-checkout
-git checkout $IMMORTALWRT_BRANCH
+git checkout
 popd
 rm -rf package/lean/luci-app-filebrowser
 mv immortalwrt/luci/applications/luci-app-filebrowser package/lean/luci-app-filebrowser
@@ -40,12 +39,11 @@ mv immortalwrt/luci/applications/luci-app-smartdns package/lean/luci-app-smartdn
 sed -i "s/..\/..\/luci.mk/\$(TOPDIR)\/feeds\/luci\/luci.mk/g" package/lean/luci-app-smartdns/Makefile
 
 mkdir -p immortalwrt/packages
+git clone --depth 1 -b $IMMORTALWRT_BRANCH --filter=blob:none --sparse https://github.com/immortalwrt/packages.git --no-checkout immortalwrt/packages
 pushd immortalwrt/packages
-git init
-git remote add -f origin https://github.com/immortalwrt/packages.git
-git config core.sparsecheckout true
+git sparse-checkout init --cone
 echo "utils/filebrowser" >> .git/info/sparse-checkout
-git checkout $IMMORTALWRT_BRANCH
+git checkout
 popd
 rm -rf package/lean/filebrowser
 mv immortalwrt/packages/utils/filebrowser package/lean/filebrowser
@@ -54,12 +52,11 @@ sed -i "s/..\/..\/lang\/golang\/golang-package.mk/\$(TOPDIR)\/feeds\/packages\/l
 rm -rf immortalwrt
 
 mkdir -p vernesong/OpenClash
+git clone --depth 1 -b $OPENCLASH_BRANCH --filter=blob:none --sparse https://github.com/vernesong/OpenClash.git --no-checkout vernesong/OpenClash
 pushd vernesong/OpenClash
-git init
-git remote add -f origin https://github.com/vernesong/OpenClash.git
-git config core.sparsecheckout true
+git sparse-checkout init --cone
 echo "luci-app-openclash" >> .git/info/sparse-checkout
-git checkout $OPENCLASH_BRANCH
+git checkout
 popd
 rm -rf package/lean/luci-app-openclash
 mv vernesong/OpenClash/luci-app-openclash package/lean/luci-app-openclash
