@@ -13,6 +13,9 @@
 # Modify default IP
 sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
 
+rm -rf feeds/routing/batman-adv/src/compat-hacks.h
+curl --retry 5 -L https://github.com/No06/routing/raw/main/batman-adv/src/compat-hacks.h -o feeds/routing/batman-adv/src/compat-hacks.h
+
 Arch="amd64"
 CPU_MODEL="${Arch}-v3"
 CLASH_META_REPOS_VERNESONG=${CLASH_META_REPOS_VERNESONG:-true}
