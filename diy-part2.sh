@@ -22,6 +22,7 @@ git clone --depth 1 -b master https://github.com/jerrykuku/luci-theme-argon.git 
 
 # rm -rf feeds/packages/net/smartdns
 # svn co https://github.com/immortalwrt/packages/branches/openwrt-23.05/net/smartdns feeds/packages/net/smartdns
+rm -rf feeds/packages/net/smartdns/conf
 mkdir -p feeds/packages/net/smartdns/conf
 #sed -i 's/PKG_BUILD_DIR)\/package\/openwrt\/custom.conf/CURDIR)\/conf\/custom.conf/g' feeds/packages/net/smartdns/Makefile
 #sed -i 's/PKG_BUILD_DIR)\/package\/openwrt\/files\/etc\/config\/smartdns/CURDIR)\/conf\/smartdns.conf/g' feeds/packages/net/smartdns/Makefile
