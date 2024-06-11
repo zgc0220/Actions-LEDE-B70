@@ -12,16 +12,19 @@
 
 # Uncomment a feed source
 #sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
+sed -i 's/^#\(.*luci\)/\1/' feeds.conf.default
+sed -i 's/src-git luci/#src-git luci/' feeds.conf.default
 
 # Add a feed source
 #echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
 #echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
+echo 'src-git luci https://github.com/coolsnowwolf/luci.git;openwrt-23.05' >>feeds.conf.default
 
-IMMORTALWRT_BRANCH=openwrt-18.06
+IMMORTALWRT_BRANCH=openwrt-23.05
 OPENCLASH_BRANCH=dev
 
 rm -rf package/lean/luci-app-argon-config
-git clone --depth 1 -b 18.06 https://github.com/jerrykuku/luci-app-argon-config.git package/lean/luci-app-argon-config
+git clone --depth 1 -b master https://github.com/jerrykuku/luci-app-argon-config.git package/lean/luci-app-argon-config
 
 mkdir -p immortalwrt/luci
 git clone --depth 1 -b $IMMORTALWRT_BRANCH --filter=blob:none --sparse https://github.com/immortalwrt/luci.git --no-checkout immortalwrt/luci

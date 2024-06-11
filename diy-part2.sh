@@ -18,16 +18,16 @@ CPU_MODEL="${Arch}-v3"
 CLASH_META_REPOS_VERNESONG=${CLASH_META_REPOS_VERNESONG:-true}
 
 rm -rf feeds/luci/themes/luci-theme-argon
-git clone --depth 1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon
+git clone --depth 1 -b master https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon
 
 # rm -rf feeds/packages/net/smartdns
-# svn co https://github.com/immortalwrt/packages/branches/openwrt-18.06/net/smartdns feeds/packages/net/smartdns
+# svn co https://github.com/immortalwrt/packages/branches/openwrt-23.05/net/smartdns feeds/packages/net/smartdns
 mkdir -p feeds/packages/net/smartdns/conf
 sed -i 's/PKG_BUILD_DIR)\/package\/openwrt\/custom.conf/CURDIR)\/conf\/custom.conf/g' feeds/packages/net/smartdns/Makefile
 sed -i 's/PKG_BUILD_DIR)\/package\/openwrt\/files\/etc\/config\/smartdns/CURDIR)\/conf\/smartdns.conf/g' feeds/packages/net/smartdns/Makefile
 
 # rm -rf feeds/packages/net/zerotier
-# svn co https://github.com/immortalwrt/packages/branches/openwrt-18.06/net/zerotier feeds/packages/net/zerotier
+# svn co https://github.com/immortalwrt/packages/branches/openwrt-23.05/net/zerotier feeds/packages/net/zerotier
 
 cp $GITHUB_WORKSPACE/scripts/check_smartdns_connect.sh package/base-files/files/etc
 cp $GITHUB_WORKSPACE/scripts/check_openclash_connect.sh package/base-files/files/etc
