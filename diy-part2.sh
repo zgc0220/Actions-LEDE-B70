@@ -10,6 +10,9 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
+rm -f feeds/routing/batman-adv/src/compat-hacks.h
+curl --retry 5 -L https://raw.githubusercontent.com/No06/routing/main/batman-adv/src/compat-hacks.h -o feeds/routing/batman-adv/src/compat-hacks.h
+
 # Modify default IP
 sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
 
