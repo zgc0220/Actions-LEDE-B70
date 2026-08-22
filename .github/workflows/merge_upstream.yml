@@ -47,12 +47,12 @@ jobs:
         id: cache
         uses: actions/cache@v4
         with:
-          path: .commitHash
-          key: HEAD-${{ steps.hash.outputs.commitHash }}
+          path: .b70-merge-hash
+          key: b70-merge-${{ steps.hash.outputs.commitHash }}
 
       - name: Save new hash
         if: steps.cache.outputs.cache-hit != 'true'
-        run: echo "${{ steps.hash.outputs.commitHash }}" > .commitHash
+        run: echo "${{ steps.hash.outputs.commitHash }}" > .b70-merge-hash
 
       - name: Trigger Build OpenWrt
         if: steps.cache.outputs.cache-hit != 'true'
