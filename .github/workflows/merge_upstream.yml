@@ -1,48 +1,67 @@
-#
-# This is free software, lisence use MIT.
-#
-# Copyright (C) 2019 KFERMercer <KFER.Mercer@gmail.com>
-#
-# <https://github.com/KFERMercer/OpenWrt-CI>
-#
-
+# B70 (hiwifi_hc5962) uses coolsourcewolf/lede as its build base.
+# The old workflow tried to rebase this repository onto zgc/Actions-LEDE,
+# which has no shared history and always produced add/add conflicts. This
+# workflow only checks for a new lede commit and feeds the existing
+# 'Source Code Update' event; it never rewrites this repository's files.
 name: Merge-upstream
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */8 * * *'
+    - cron: '22 */8 * * *'
   watch:
     types:
       - 'started'
 
+concurrency:
+  group: b70-update-${{ github.repository }}
+  cancel-in-progress: false
+
+env:
+  UPSTREAM_REPO: https://github.com/coolsnowwolf/lede
+  UPSTREAM_BRANCH: master
+
+permissions:
+  contents: read
+  actions: write
+
 jobs:
-  merge:
-
+  check-and-trigger:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
 
-    - name: Checkout
-      uses: actions/checkout@main
-      with:
-        ref: main
-        fetch-depth: 0
-        lfs: true
-        token: ${{ secrets.SEC_TOKEN }}
+      - name: Get upstream commit hash
+        id: hash
+        run: |
+          set -euo pipefail
+          SHA=$(git ls-remote $UPSTREAM_REPO refs/heads/$UPSTREAM_BRANCH | awk 'NR == 1 { print $1 }')
+          [ -n "$SHA" ] || { echo '::error::unable to resolve upstream SHA'; exit 1; }
+          echo "commitHash=$SHA" >> "$GITHUB_OUTPUT"
 
-    - name: Set git identity
-      run : |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+      - name: Compare against cache
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: .commitHash
+          key: HEAD-${{ steps.hash.outputs.commitHash }}
 
-    - name: Load upstream commits
-      run:  |
-        git remote add upstream https://github.com/zgc/Actions-LEDE
-        git fetch upstream
-        git rebase upstream/main
+      - name: Save new hash
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: echo "${{ steps.hash.outputs.commitHash }}" > .commitHash
 
-    - name: Push Commits
-      env:
-        DOWNSTREAM_BRANCH: main
-      run: git push --force-with-lease origin $DOWNSTREAM_BRANCH
+      - name: Trigger Build OpenWrt
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.SEC_TOKEN }}
+          event-type: Source Code Update
+
+      - name: Summary
+        if: always()
+        run: echo "lede ${{ env.UPSTREAM_BRANCH }} = ${{ steps.hash.outputs.commitHash }}; build=${{ steps.cache.outputs.cache-hit }}"
+
