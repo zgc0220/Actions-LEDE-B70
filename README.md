@@ -12,8 +12,8 @@
 ## 仓库边界
 
 - 与 base 同步：`git fetch base main && git rebase base/main`
-- 设备文件：`config.seed`（ramips 目标与设备包）、`openwrt-device.conf`（发布名和运行参数）
-- 本仓库默认无 `files/`；设备运行时配置按需从实机迁移
+- 设备文件：`config.seed`（ramips 目标与设备包）、`openwrt-device.conf`（发布名和运行参数）、`files/etc/config/vnstat`（br-lan 与 wan 流量统计）
+- 除 vnstat2 预配置外不预置其他 `files/` 运行时配置；其他配置按需从实机迁移
 - packages feed 暂用兼容 pin（pre-golang-1.27）；上游合并后应随 base 清理固定值。
 
 ## 构建
