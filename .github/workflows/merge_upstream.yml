@@ -6,7 +6,7 @@
 # <https://github.com/KFERMercer/OpenWrt-CI>
 #
 
-name: Merge-upstream
+name: Rebase Base
 
 on:
   workflow_dispatch:
@@ -14,8 +14,8 @@ on:
     - cron: '0 3 * * 1'
 
 env:
-  UPSTREAM_REPO: https://github.com/P3TERX/Actions-OpenWrt
-  UPSTREAM_BRANCH: main
+  BASE_REPO: https://github.com/zgc/Actions-LEDE
+  BASE_BRANCH: main
 
 concurrency:
   group: firmware-lifecycle-${{ github.repository }}
@@ -45,25 +45,27 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
 
-    - name: Check upstream
-      id: upstream
+    - name: Check Base
+      id: base
       run:  |
-        git remote remove upstream >/dev/null 2>&1 || true
-        git remote add upstream "$UPSTREAM_REPO"
-        git fetch --force upstream
-        if git merge-base --is-ancestor "upstream/$UPSTREAM_BRANCH" HEAD; then
-          echo "changed=false"
-          echo "✅ upstream already up to date"
+        git remote remove base >/dev/null 2>&1 || true
+        git remote add base "$BASE_REPO"
+        git fetch --force base
+        if git merge-base --is-ancestor "base/$BASE_BRANCH" HEAD; then
+          echo "changed=false" >> "$GITHUB_OUTPUT"
+          echo "✅ base already up to date"
         else
-          echo "changed=true"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
         fi
 
-    - name: Rebase upstream commits
-      if: steps.upstream.outputs.changed == 'true'
-      run: git rebase "upstream/$UPSTREAM_BRANCH"
+    - name: Rebase Base commits
+      if: steps.base.outputs.changed == 'true'
+      run: |
+        # 冲突必须失败并人工处理，禁止用 merge=ours 静默保留旧设备文件。
+        git rebase "base/$BASE_BRANCH"
 
     - name: Push Commits
-      if: steps.upstream.outputs.changed == 'true'
+      if: steps.base.outputs.changed == 'true'
       env:
         DOWNSTREAM_BRANCH: main
       run: git push --force-with-lease origin $DOWNSTREAM_BRANCH
