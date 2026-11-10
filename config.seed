@@ -108,6 +108,7 @@ CONFIG_PACKAGE_irqbalance=y
 # CONFIG_PACKAGE_ddns-scripts_dnspod is not set
 # First-boot defaults (default-settings)
 CONFIG_PACKAGE_default-settings-chn=y
+CONFIG_PACKAGE_kmod-hid-logitech=y
 # B70 (HiWiFi HC5962) device additions
 CONFIG_PACKAGE_luci-app-vlmcsd=y
 CONFIG_PACKAGE_vlmcsd=y
