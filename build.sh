@@ -192,6 +192,14 @@ else
   done
 fi
 [ "$feeds_updated" -eq 1 ] || { echo "❌ feeds update failed after 3 attempts"; exit 1; }
+
+# B70 (ramips): 上游 feeds 的三个 Kconfig 递归环（qt5base OpenGL choice、fwknopd、
+# squeezelite-custom）会让 defconfig 直接失败；这三组包在本机型未使用，安装前
+# 从源码树剔除，避免污染 Kconfig 解析（x86 设备不受影响，故只放在 B70 仓库）。
+rm -rf feeds/video/frameworks/qt5 \
+       feeds/packages/net/fwknop \
+       feeds/packages/sound/squeezelite
+
 "$GITHUB_WORKSPACE/scripts/build/install_selected_feeds.sh" \
   "$GITHUB_WORKSPACE/openwrt" "$GITHUB_WORKSPACE/$CONFIG_FILE" || {
   echo "❌ selected feed installation failed"
